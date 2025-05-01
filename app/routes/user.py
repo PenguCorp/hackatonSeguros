@@ -1,21 +1,18 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from sqlalchemy.orm import Session
 from app.schemas.user import UserCreate, UserResponse
-from app.models.user import fake_user_db
+from app.database import get_db
+from app.services import user
 
 router = APIRouter()
 
 @router.post("/", response_model=UserResponse)
-def create_user(user: UserCreate):
-    if user.username in fake_user_db:
-        raise HTTPException(status_code=400, detail="Usuario ya existe")
-    
-    fake_user_db[user.username] = user.dict()
-    return user
+def create_usuario(usuario: UserCreate, db: Session = Depends(get_db)):
+    return user.create_usuario(db=db, nombre=usuario.nombre, correo=usuario.correo)
 
-@router.get("/{username}", response_model=UserResponse)
-def read_user(username: str):
-    user = fake_user_db.get(username)
-    if not user:
+@router.get("/{usuario_id}", response_model=UserResponse)
+def get_usuario(usuario_id: int, db: Session = Depends(get_db)):
+    db_usuario = user.get_usuario(db=db, usuario_id=usuario_id)
+    if db_usuario is None:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
-    
-    return user
+    return db_usuario

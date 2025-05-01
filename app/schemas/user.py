@@ -1,9 +1,15 @@
+# app/schemas.py (o donde tengas tus esquemas)
 from pydantic import BaseModel
 
-class UserCreate(BaseModel):
-    username: str
-    email: str
-
 class UserResponse(BaseModel):
-    username: str
-    email: str
+    id: int
+    nombre: str
+    correo: str
+
+    class Config:
+        orm_mode = True
+
+class UserCreate(BaseModel):
+    nombre: str
+    correo: str
+

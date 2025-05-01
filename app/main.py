@@ -1,5 +1,9 @@
 from fastapi import FastAPI
 from app.routes import user
+from app.database import engine, SessionLocal, Base
+# Crear las tablas en la base de datos
+Base.metadata.create_all(bind=engine)
+
 
 app = FastAPI()
 
