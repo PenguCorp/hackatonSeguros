@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.routes import user
+from app.routes import user, login
 from app.database import engine, SessionLocal, Base
 # Crear las tablas en la base de datos
 Base.metadata.create_all(bind=engine)
@@ -8,6 +8,7 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 app.include_router(user.router, prefix="/users", tags=["Users"])
+app.include_router(login.router, prefix="/auth", tags=["Auth"])
 
 @app.get("/")
 def read_root():

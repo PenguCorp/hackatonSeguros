@@ -1,15 +1,19 @@
-# app/schemas.py (o donde tengas tus esquemas)
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
-class UserResponse(BaseModel):
-    id: int
+class UserBase(BaseModel):
     nombre: str
-    correo: str
+    correo: EmailStr
+
+class UserCreate(UserBase):
+    password: str  # Agregado
+
+class UserResponse(UserBase):
+    id: int
 
     class Config:
         orm_mode = True
 
-class UserCreate(BaseModel):
-    nombre: str
-    correo: str
+class LoginRequest(BaseModel):
+    correo: EmailStr
+    password: str
 
