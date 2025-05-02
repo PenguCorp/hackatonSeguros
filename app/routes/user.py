@@ -17,9 +17,9 @@ def get_usuario(usuario_id: int, db: Session = Depends(get_db)):
 
 @router.post("/", response_model=UserResponse)
 def create_usuario(usuario: UserCreate, db: Session = Depends(get_db)):
-    existing_user = user_service.get_usuario_by_email(db, usuario.correo)
+    existing_user = user_service.get_usuario_by_email(db, usuario.email)
     if existing_user:
         raise HTTPException(status_code=400, detail="Correo ya registrado")
     return user_service.create_usuario(
-        db=db, nombre=usuario.nombre, correo=usuario.correo, password=usuario.password
+        db=db, nombre=usuario.nombre, email=usuario.email, password=usuario.password
     )
