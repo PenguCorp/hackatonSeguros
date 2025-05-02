@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.routes import user, login
+from app.routes import user, login, formulario
 from app.database import engine, SessionLocal, Base
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -25,6 +25,7 @@ Base.metadata.create_all(bind=engine)
 
 app.include_router(user.router, prefix="/users", tags=["Users"])
 app.include_router(login.router, prefix="/auth", tags=["Auth"])
+app.include_router(formulario.router, prefix="/formulario", tags=["Caracterización"])
 
 @app.get("/")
 def read_root():
